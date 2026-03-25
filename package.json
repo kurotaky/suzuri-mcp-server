@@ -1,0 +1,23 @@
+{
+  "name": "suzuri-mcp-server",
+  "version": "0.1.0",
+  "description": "MCP server for SUZURI API - プリントオンデマンド商品プラットフォーム",
+  "type": "module",
+  "bin": {
+    "suzuri-mcp-server": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "keywords": ["mcp", "suzuri", "api"],
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0"
+  }
+}
