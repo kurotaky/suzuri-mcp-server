@@ -4,20 +4,33 @@
   "description": "MCP server for SUZURI API - プリントオンデマンド商品プラットフォーム",
   "type": "module",
   "bin": {
-    "suzuri-mcp-server": "./dist/index.js"
+    "suzuri-mcp-server": "./dist/index.mjs"
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
-    "start": "node dist/index.js"
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "start": "node dist/index.mjs",
+    "test": "vp test",
+    "check": "vp check",
+    "prepare": "vp config"
   },
-  "keywords": ["mcp", "suzuri", "api"],
+  "keywords": [
+    "mcp",
+    "suzuri",
+    "api"
+  ],
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
-    "@types/node": "^22.0.0"
+    "@types/node": "^22.0.0",
+    "vite-plus": "latest"
+  },
+  "packageManager": "npm@11.12.0",
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
   }
 }
