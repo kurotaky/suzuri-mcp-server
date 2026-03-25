@@ -4,7 +4,25 @@
 
 Claude Desktop などの MCP クライアントから SUZURI の商品検索、素材管理、ユーザー情報取得などの操作ができます。
 
-## セットアップ
+## クイックセットアップ
+
+事前に https://suzuri.jp/developer/apps でAPIトークンを取得しておいてください。
+
+```bash
+ghq get https://github.com/kurotaki_pepabo/suzuri-mcp-server.git
+cd $(ghq root)/github.com/kurotaki_pepabo/suzuri-mcp-server
+./setup.sh
+```
+
+セットアップスクリプトが以下を自動で行います：
+
+1. 依存関係のインストールとビルド
+2. トークンの入力（対話式）
+3. `~/.claude/settings.json` への MCP サーバー設定の追加
+
+完了後、Claude Code を再起動すれば利用可能になります。
+
+## 手動セットアップ
 
 ### 1. APIトークンの取得
 
@@ -37,7 +55,7 @@ npm run build
 }
 ```
 
-`/path/to/suzuri-mcp-server` は実際のパスに置き換えてください（例: `ghq root` の場合は `$(ghq root)/github.com/kurotaki_pepabo/suzuri-mcp-server/dist/index.mjs`）。
+`/path/to/suzuri-mcp-server` は実際のパスに置き換えてください（例: `$(ghq root)/github.com/kurotaki_pepabo/suzuri-mcp-server/dist/index.mjs`）。
 
 ### Claude Desktop での設定
 
