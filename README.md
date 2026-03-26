@@ -2,9 +2,6 @@
 
 > **⚠️ Unofficial / 非公式**
 > このMCPサーバーはSUZURIの公式プロダクトではありません。個人が開発・公開しているものです。
->
-> **🚧 開発中**
-> 現在アクティブに開発中のため、APIやツールの仕様が予告なく変更される可能性があります。
 
 [SUZURI](https://suzuri.jp/) API 用の MCP (Model Context Protocol) サーバーです。
 
