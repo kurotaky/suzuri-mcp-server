@@ -49,7 +49,7 @@ export function extractBaseHash(sampleImageUrl: string): string | null {
  */
 export function buildPreviewUrl(
   sampleImageUrl: string,
-  params: { scale: number; offsetX: number; offsetY: number }
+  params: { scale: number; offsetX: number; offsetY: number },
 ): string {
   const adjustment = formatAdjustment(params.scale, params.offsetX, params.offsetY);
   const baseHash = extractBaseHash(sampleImageUrl);
@@ -60,8 +60,8 @@ export function buildPreviewUrl(
 
   // パスにadjustmentを挿入
   const adjusted = pathPart.replace(
-    /(\.(jpg|png))(\.[\d.+\-]+)?(\.(webp|png))$/,
-    `$1.${adjustment}$4`
+    /(\.(jpg|png))(\.[\d.+-]+)?(\.(webp|png))$/,
+    `$1.${adjustment}$4`,
   );
 
   // ハッシュを再計算

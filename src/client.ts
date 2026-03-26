@@ -4,7 +4,7 @@ export function getToken(): string {
   const token = process.env.SUZURI_TOKEN;
   if (!token) {
     throw new Error(
-      "SUZURI_TOKEN 環境変数が設定されていません。https://suzuri.jp/developer/apps からトークンを取得してください。"
+      "SUZURI_TOKEN 環境変数が設定されていません。https://suzuri.jp/developer/apps からトークンを取得してください。",
     );
   }
   return token;
@@ -16,7 +16,7 @@ export async function suzuriRequest(
     method?: string;
     params?: Record<string, string | number | undefined>;
     body?: Record<string, unknown>;
-  } = {}
+  } = {},
 ): Promise<unknown> {
   const { method = "GET", params, body } = options;
   const url = new URL(`${BASE_URL}${path}`);
