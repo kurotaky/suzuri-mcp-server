@@ -1,6 +1,6 @@
 {
   "name": "@kurotaky/suzuri-mcp-server",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server for SUZURI API - オリジナルグッズ作成プラットフォームSUZURIの商品検索・素材管理・配置プレビューをAIアシスタントから操作",
   "keywords": [
     "ai",
