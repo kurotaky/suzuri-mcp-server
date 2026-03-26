@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { formatLensNumber, formatAdjustment, computeAdjustedHash, extractBaseHash, buildPreviewUrl } from "../preview.js";
+import {
+  formatLensNumber,
+  formatAdjustment,
+  computeAdjustedHash,
+  extractBaseHash,
+  buildPreviewUrl,
+} from "../preview.js";
 
 describe("formatLensNumber", () => {
   it("0.0をそのまま保持する", () => {
@@ -52,7 +58,8 @@ describe("computeAdjustedHash", () => {
 
 describe("extractBaseHash", () => {
   it("URLからハッシュを抽出する", () => {
-    const url = "https://lens.suzuri.jp/v3/500x500/t-shirt/s/white/front/123/100.jpg.webp?h=abc123def&printed=true";
+    const url =
+      "https://lens.suzuri.jp/v3/500x500/t-shirt/s/white/front/123/100.jpg.webp?h=abc123def&printed=true";
     expect(extractBaseHash(url)).toBe("abc123def");
   });
 

@@ -2,13 +2,27 @@
   "name": "@kurotaky/suzuri-mcp-server",
   "version": "0.1.0",
   "description": "MCP server for SUZURI API - オリジナルグッズ作成プラットフォームSUZURIの商品検索・素材管理・配置プレビューをAIアシスタントから操作",
-  "type": "module",
+  "keywords": [
+    "ai",
+    "api",
+    "claude",
+    "mcp",
+    "model-context-protocol",
+    "print-on-demand",
+    "suzuri"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kurotaky/suzuri-mcp-server"
+  },
   "bin": {
     "suzuri-mcp-server": "./dist/index.mjs"
   },
   "files": [
     "dist"
   ],
+  "type": "module",
   "scripts": {
     "build": "vp pack",
     "dev": "vp pack --watch",
@@ -18,31 +32,14 @@
     "prepare": "vp config",
     "prepublishOnly": "npm run build"
   },
-  "keywords": [
-    "mcp",
-    "suzuri",
-    "api",
-    "model-context-protocol",
-    "claude",
-    "ai",
-    "print-on-demand"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kurotaky/suzuri-mcp-server"
-  },
-  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1"
   },
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "typescript": "^5.7.0",
-    "@types/node": "^22.0.0",
-    "vite-plus": "latest"
+    "vite-plus": "latest",
+    "vitest": "^4.1.1"
   },
-  "packageManager": "npm@11.12.0",
-  "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
-  }
+  "packageManager": "npm@11.12.0"
 }
