@@ -57,7 +57,13 @@ describe('MCPサーバー', () => {
     expect(toolNames).toContain('create_choice');
     expect(toolNames).toContain('update_choice');
     expect(toolNames).toContain('delete_choice');
-    expect(tools).toHaveLength(21);
+    expect(toolNames).toContain('get_placement_presets');
+    expect(toolNames).toContain('preview_product_placement');
+    expect(toolNames).toContain('compare_placements');
+    expect(toolNames).toContain('create_product_with_placement');
+    expect(toolNames).toContain('analyze_reference_image');
+    expect(toolNames).toContain('get_browser_selection');
+    expect(tools).toHaveLength(27);
   });
 
   it('search_products がキーワードで検索できる', async () => {
@@ -142,6 +148,137 @@ describe('MCPサーバー', () => {
     expect(mockedRequest).toHaveBeenCalledWith('/user');
     const content = result.content as Array<{ type: string; text: string }>;
     expect(JSON.parse(content[0]!.text)).toEqual(mockData);
+  });
+
+  it('get_placement_presets がプリセット一覧を返す', async () => {
+    const result = await client.callTool({
+      name: 'get_placement_presets',
+      arguments: {},
+    });
+
+    const content = result.content as Array<{ type: string; text: string }>;
+    const data = JSON.parse(content[0]!.text);
+    expect(data.presets.length).toBeGreaterThan(0);
+    expect(data.presets[0]).toHaveProperty('name');
+    expect(data.presets[0]).toHaveProperty('scale');
+  });
+
+  it('get_placement_presets がカテゴリでフィルタできる', async () => {
+    const result = await client.callTool({
+      name: 'get_placement_presets',
+      arguments: { category: 'mug' },
+    });
+
+    const content = result.content as Array<{ type: string; text: string }>;
+    const data = JSON.parse(content[0]!.text);
+    for (const preset of data.presets) {
+      expect(preset.recommendedFor).toContain('mug');
+    }
+  });
+
+  it('preview_product_placement がプレビューURLを生成できる', async () => {
+    const sampleUrl = 'https://lens.suzuri.jp/v3/500x500/t-shirt/s/white/front/123/100-1920x1080.jpg.webp?h=abc&printed=true';
+
+    const result = await client.callTool({
+      name: 'preview_product_placement',
+      arguments: { sampleImageUrl: sampleUrl, scale: 0.5, offsetX: 0.1, offsetY: -0.1 },
+    });
+
+    const content = result.content as Array<{ type: string; text: string }>;
+    const data = JSON.parse(content[0]!.text);
+    expect(data.appliedParams).toEqual({ scale: 0.5, offsetX: 0.1, offsetY: -0.1 });
+    expect(data.previewUrl).toContain('.0.5+0.1-0.1.');
+  });
+
+  it('preview_product_placement がプリセット名でプレビューできる', async () => {
+    const sampleUrl = 'https://lens.suzuri.jp/v3/500x500/t-shirt/s/white/front/123/100-1920x1080.jpg.webp?h=abc&printed=true';
+
+    const result = await client.callTool({
+      name: 'preview_product_placement',
+      arguments: { sampleImageUrl: sampleUrl, presetName: 'left_chest' },
+    });
+
+    const content = result.content as Array<{ type: string; text: string }>;
+    const data = JSON.parse(content[0]!.text);
+    expect(data.appliedParams).toEqual({ scale: 0.3, offsetX: -0.25, offsetY: -0.2 });
+    expect(data.presetUsed).toBe('left_chest');
+    expect(data.previewUrl).toContain('.0.3-0.25-0.2.');
+  });
+
+  it('compare_placements がブラウザ比較ページを生成できる', async () => {
+    const sampleUrl = 'https://lens.suzuri.jp/v3/500x500/t-shirt/s/white/front/123/100-1920x1080.jpg.webp?h=abc&printed=true';
+
+    // execSyncをモック（open コマンド）
+    vi.mock('node:child_process', () => ({ execSync: vi.fn() }));
+
+    const result = await client.callTool({
+      name: 'compare_placements',
+      arguments: {
+        sampleImageUrl: sampleUrl,
+        placements: [
+          { label: '中央', presetName: 'center' },
+          { label: '左胸', presetName: 'left_chest' },
+        ],
+      },
+    });
+
+    const content = result.content as Array<{ type: string; text: string }>;
+    const data = JSON.parse(content[0]!.text);
+    expect(data.browserUrl).toMatch(/^http:\/\/localhost:\d+$/);
+    expect(data.comparisons).toHaveLength(2);
+    expect(data.comparisons[0].label).toBe('中央');
+    expect(data.comparisons[1].label).toBe('左胸');
+  });
+
+  it('create_product_with_placement が配置指定で商品を作成できる', async () => {
+    const mockData = { product: { id: 42 } };
+    mockedRequest.mockResolvedValue(mockData);
+
+    const result = await client.callTool({
+      name: 'create_product_with_placement',
+      arguments: {
+        materialId: 100,
+        itemId: 1,
+        presetName: 'left_chest',
+        published: true,
+      },
+    });
+
+    expect(mockedRequest).toHaveBeenCalledWith('/materials/100/products', {
+      method: 'POST',
+      body: { itemId: 1, published: true, scale: 0.3, offsetX: -0.25, offsetY: -0.2, color: undefined },
+    });
+    const content = result.content as Array<{ type: string; text: string }>;
+    expect(JSON.parse(content[0]!.text)).toEqual(mockData);
+  });
+
+  it('analyze_reference_image が参考画像を分析用に返す', async () => {
+    // fetchをモック
+    const originalFetch = globalThis.fetch;
+    const pngBytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47]); // PNG magic bytes
+    globalThis.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      headers: new Headers({ 'content-type': 'image/png' }),
+      arrayBuffer: () => Promise.resolve(pngBytes.buffer),
+    }) as unknown as typeof fetch;
+
+    try {
+      const result = await client.callTool({
+        name: 'analyze_reference_image',
+        arguments: { referenceImageUrl: 'https://example.com/ref.png', itemType: 'tshirt' },
+      });
+
+      const content = result.content as Array<{ type: string; text?: string; data?: string; mimeType?: string }>;
+      expect(content).toHaveLength(2);
+      expect(content[0]!.type).toBe('image');
+      expect(content[0]!.mimeType).toBe('image/png');
+      expect(content[0]!.data).toBeDefined();
+      expect(content[1]!.type).toBe('text');
+      expect(content[1]!.text).toContain('参考画像を分析');
+      expect(content[1]!.text).toContain('tshirt');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
   });
 
   it('add_favorite がお気に入りを追加できる', async () => {
