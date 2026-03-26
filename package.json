@@ -1,24 +1,36 @@
 {
-  "name": "suzuri-mcp-server",
+  "name": "@kurotaky/suzuri-mcp-server",
   "version": "0.1.0",
-  "description": "MCP server for SUZURI API - プリントオンデマンド商品プラットフォーム",
+  "description": "MCP server for SUZURI API - オリジナルグッズ作成プラットフォームSUZURIの商品検索・素材管理・配置プレビューをAIアシスタントから操作",
   "type": "module",
   "bin": {
     "suzuri-mcp-server": "./dist/index.mjs"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "vp pack",
     "dev": "vp pack --watch",
     "start": "node dist/index.mjs",
     "test": "vp test",
     "check": "vp check",
-    "prepare": "vp config"
+    "prepare": "vp config",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "mcp",
     "suzuri",
-    "api"
+    "api",
+    "model-context-protocol",
+    "claude",
+    "ai",
+    "print-on-demand"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kurotaky/suzuri-mcp-server"
+  },
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1"

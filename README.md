@@ -1,15 +1,23 @@
-# suzuri-mcp-server
+# @kurotaky/suzuri-mcp-server
 
 [SUZURI](https://suzuri.jp/) API 用の MCP (Model Context Protocol) サーバーです。
 
-Claude Desktop などの MCP クライアントから SUZURI の商品検索、素材管理、ユーザー情報取得などの操作ができます。
+Claude Desktop などの MCP クライアントから SUZURI の商品検索、素材管理、配置プレビュー、ユーザー情報取得などの操作ができます。
 
-## クイックセットアップ
+## npx でセットアップ（推奨）
 
 事前に https://suzuri.jp/developer/apps でAPIトークンを取得しておいてください。
 
 ```bash
-git clone https://github.com/kurotaki_pepabo/suzuri-mcp-server.git
+claude mcp add suzuri -e SUZURI_TOKEN=your-token-here -- npx -y @kurotaky/suzuri-mcp-server
+```
+
+これだけで使えます。Claude Code を再起動すれば利用可能です。
+
+## ソースからセットアップ
+
+```bash
+git clone https://github.com/kurotaky/suzuri-mcp-server.git
 cd suzuri-mcp-server
 ./setup.sh
 ```
