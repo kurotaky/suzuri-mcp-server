@@ -1,6 +1,6 @@
 {
   "name": "@kurotaky/suzuri-mcp-server",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "MCP server for SUZURI API - オリジナルグッズ作成プラットフォームSUZURIの商品検索・素材管理・配置プレビューをAIアシスタントから操作",
   "keywords": [
     "ai",
@@ -14,10 +14,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kurotaky/suzuri-mcp-server"
+    "url": "git+https://github.com/kurotaky/suzuri-mcp-server.git"
   },
   "bin": {
-    "suzuri-mcp-server": "./dist/index.mjs"
+    "suzuri-mcp-server": "dist/index.mjs"
   },
   "files": [
     "dist"
